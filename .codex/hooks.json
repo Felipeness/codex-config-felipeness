@@ -1,0 +1,19 @@
+{
+  "description": "Optional local shell safety guard for this repository.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/pre_tool_guard.py\"",
+            "commandWindows": "py -3 \"$(git rev-parse --show-toplevel)/.codex/hooks/pre_tool_guard.py\"",
+            "timeout": 2,
+            "statusMessage": "Checking risky shell commands"
+          }
+        ]
+      }
+    ]
+  }
+}

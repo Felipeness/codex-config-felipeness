@@ -1,0 +1,15 @@
+# Mescle estas tabelas com $CODEX_HOME/config.toml (~/.codex/config.toml).
+# Se uma tabela já existir, incorpore apenas as chaves desejadas.
+# A preferência Claude `effortLevel = "xhigh"` pode ser representada pela chave
+# abaixo; habilite somente se o modelo selecionado e o cliente aceitarem esse nível.
+# model_reasoning_effort = "xhigh"
+
+[tui]
+status_line = ["model-with-reasoning", "context-remaining", "current-dir", "git-branch"]
+terminal_title = ["spinner", "project"]
+
+[agents]
+max_concurrent_threads_per_session = 4
+
+[features]
+hooks = true
