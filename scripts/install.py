@@ -29,10 +29,6 @@ BACKUP_STAMP = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 BEGIN_MARKER = "<!-- BEGIN codex-config-felipeness managed instructions -->"
 END_MARKER = "<!-- END codex-config-felipeness managed instructions -->"
 
-STATUS_LINE = ["model-with-reasoning", "context-remaining", "current-dir", "git-branch"]
-TERMINAL_TITLE = ["spinner", "project"]
-
-
 def backup_path(path: pathlib.Path) -> pathlib.Path:
     candidate = path.with_name(f"{path.name}.backup.{BACKUP_STAMP}")
     suffix = 1
@@ -203,19 +199,8 @@ def merge_table(
 
 
 def merge_config(text: str) -> str:
-    # The status line is the requested visible outcome. Preserve any existing
-    # terminal title and agent thread limit if the user already chose them.
     merged = merge_table(
         text,
-        "tui",
-        {
-            "status_line": json.dumps(STATUS_LINE),
-            "terminal_title": json.dumps(TERMINAL_TITLE),
-        },
-        required_overrides={"status_line"},
-    )
-    merged = merge_table(
-        merged,
         "agents",
         {"max_concurrent_threads_per_session": "4"},
     )
@@ -332,7 +317,7 @@ def main() -> int:
     else:
         print(f"Global hooks are current: {hooks_path}")
 
-    print("\nRestart Codex to load the new status line, skills, and agents.")
+    print("\nRestart Codex to load the new instructions, skills, and agents.")
     print("Open /hooks to inspect and trust the new shell guard before expecting it to run.")
     return 0
 

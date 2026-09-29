@@ -4,10 +4,6 @@
 # abaixo; habilite somente se o modelo selecionado e o cliente aceitarem esse nível.
 # model_reasoning_effort = "xhigh"
 
-[tui]
-status_line = ["model-with-reasoning", "context-remaining", "current-dir", "git-branch"]
-terminal_title = ["spinner", "project"]
-
 [agents]
 max_concurrent_threads_per_session = 4
 

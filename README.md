@@ -1,6 +1,6 @@
 # Codex config by FelipeNess
 
-Configuração pessoal de Codex baseada nos workflows de [claude-config-felipeness](https://github.com/Felipeness/claude-config-felipeness) e no statusline de [claude-statusline](https://github.com/Felipeness/claude-statusline).
+Configuração pessoal de Codex baseada nos workflows de [claude-config-felipeness](https://github.com/Felipeness/claude-config-felipeness). O projeto separado da statusline nativa está em [statuslinecodex](https://github.com/Felipeness/statuslinecodex).
 
 O port mantém as preferências de engenharia, os fluxos de investigação, implementação, revisão e skills por domínio. Onde o Codex oferece uma interface diferente, usa a extensão nativa em vez de imitar comandos do Claude Code.
 
@@ -14,16 +14,7 @@ O port mantém as preferências de engenharia, os fluxos de investigação, impl
 | Hooks para Bash e edições | [`.codex/hooks.json`](.codex/hooks.json) | Inclui um guard opcional e restrito para comandos destrutivos |
 | Ralph loops | Skills `ralph-*` | Ciclos limitados no mesmo fluxo, sem runner externo ou execução infinita |
 | Análise com muitos agentes | [`.codex/agents/`](.codex/agents/) | Quatro agentes focados e somente leitura, acionados por uma skill de análise |
-| Studio de statusline | [`statusline/index.html`](statusline/index.html) | Editor visual offline para os itens nativos documentados pelo Codex |
 | Plugins, MCPs e settings privados do Claude | Provisionamento manual | Integrações podem exigir ferramentas, contas ou credenciais; não são instaladas nem habilitadas implicitamente |
-
-## Limite da statusline do Codex
-
-O Codex permite escolher e ordenar identificadores nativos em `tui.status_line`. A documentação não oferece um comando customizado que receba JSON por `stdin`, então não há uma API suportada para portar os 25 componentes, métricas de custo, probes de gateway, daemon de histórico ou engine ANSI do `claude-statusline`.
-
-O Studio incluído configura os cinco identificadores presentes nos exemplos oficiais: `model-with-reasoning`, `context-remaining`, `current-dir`, `model` e `git-branch`. A prévia mostra esses itens com dados ilustrativos; o Codex renderiza os valores reais dentro do TUI. O editor não altera arquivos: ele copia ou baixa um trecho TOML para revisão.
-
-O budget do LLM Gateway Superlógica é específico ao gateway Anthropic e às credenciais daquele ambiente. Não o repliquei como se fosse uma métrica disponível no Codex.
 
 Opções como `skipDangerousModePermissionPrompt`, `skipAutoPermissionPrompt` e o modo de permissão do Claude não são copiadas para reduzir as proteções do Codex. O nível `xhigh` aparece como uma opção comentada porque a disponibilidade depende do modelo e do cliente. Também não há lint/typecheck automático a cada edição: os comandos variam por projeto e devem seguir os critérios de validação da tarefa.
 
@@ -43,17 +34,9 @@ No Windows PowerShell:
 ./install.ps1
 ```
 
-O instalador copia skills para `~/.agents/skills`, agentes para `$CODEX_HOME/agents`, adiciona as instruções à `$CODEX_HOME/AGENTS.md`, mescla statusline e preferências a `$CODEX_HOME/config.toml` e instala o guard em `$CODEX_HOME/hooks.json`. Configurações preexistentes são preservadas; o statusline configurado por este pacote substitui o statusline anterior. Use `--force` / `-Force` para fazer backup e substituir skills/agentes com conflito.
+O instalador copia skills para `~/.agents/skills`, agentes para `$CODEX_HOME/agents`, adiciona as instruções à `$CODEX_HOME/AGENTS.md`, mescla preferências gerais a `$CODEX_HOME/config.toml` e instala o guard em `$CODEX_HOME/hooks.json`. Configurações preexistentes são preservadas. Use `--force` / `-Force` para fazer backup e substituir skills/agentes com conflito.
 
-Reinicie o Codex para carregar statusline, skills e agentes. O Codex exige que hooks novos sejam revisados e confiados em `/hooks` antes de executá-los. A instalação global do hook não pula essa revisão.
-
-Para experimentar a statusline, abra [`statusline/index.html`](statusline/index.html) em qualquer navegador. Ela funciona offline e gera uma configuração como:
-
-```toml
-[tui]
-status_line = ["model-with-reasoning", "context-remaining", "current-dir", "git-branch"]
-terminal_title = ["spinner", "project"]
-```
+Reinicie o Codex para carregar as skills e os agentes. A statusline nativa e o editor offline ficam no [repositório statuslinecodex](https://github.com/Felipeness/statuslinecodex). O Codex exige que hooks novos sejam revisados e confiados em `/hooks` antes de executá-los. A instalação global do hook não pula essa revisão.
 
 ## Workflows e skills
 
