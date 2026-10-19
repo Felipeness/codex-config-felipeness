@@ -1,8 +1,9 @@
-# Mescle estas tabelas com $CODEX_HOME/config.toml (~/.codex/config.toml).
-# Se uma tabela já existir, incorpore apenas as chaves desejadas.
-# A preferência Claude `effortLevel = "xhigh"` pode ser representada pela chave
-# abaixo; habilite somente se o modelo selecionado e o cliente aceitarem esse nível.
-# model_reasoning_effort = "xhigh"
+# Mescle estas chaves com $CODEX_HOME/config.toml (~/.codex/config.toml).
+# Chaves de topo precisam ficar antes da primeira tabela [..].
+# medium entrega bem no dia a dia; high/xhigh deixam o Codex lento e caro.
+model_reasoning_effort = "medium"
+# O LLM Gateway recusa "fast"; "auto" evita o aviso de service tier.
+service_tier = "auto"
 
 [agents]
 max_concurrent_threads_per_session = 4

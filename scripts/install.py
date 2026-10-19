@@ -198,9 +198,44 @@ def merge_table(
     return "\n".join(lines).rstrip() + "\n"
 
 
+def merge_root(
+    text: str,
+    settings: dict[str, str],
+    required_overrides: Iterable[str] = (),
+) -> str:
+    lines = text.splitlines()
+    headers = table_headers(lines)
+    root_end = headers[0][0] if headers else len(lines)
+    override_keys = set(required_overrides)
+    present_keys: set[str] = set()
+    for index in range(root_end):
+        for key, value in settings.items():
+            if setting_line_pattern(key).match(lines[index]):
+                present_keys.add(key)
+                if key in override_keys:
+                    lines[index] = replace_simple_assignment(lines[index], key, value)
+
+    missing = [f"{key} = {value}" for key, value in settings.items() if key not in present_keys]
+    if not missing:
+        return "\n".join(lines).rstrip() + "\n"
+    before = lines[:root_end]
+    if before and before[-1].strip():
+        before.append("")
+    after = lines[root_end:]
+    spacer = [""] if after else []
+    return "\n".join(before + missing + spacer + after).rstrip() + "\n"
+
+
 def merge_config(text: str) -> str:
-    merged = merge_table(
+    # service_tier "fast" is rejected by the LLM Gateway, so "auto" always wins;
+    # reasoning effort is only a default and keeps whatever the user already chose.
+    merged = merge_root(
         text,
+        {"model_reasoning_effort": '"medium"', "service_tier": '"auto"'},
+        required_overrides={"service_tier"},
+    )
+    merged = merge_table(
+        merged,
         "agents",
         {"max_concurrent_threads_per_session": "4"},
     )

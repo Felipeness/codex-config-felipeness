@@ -16,7 +16,7 @@ O port mantém as preferências de engenharia, os fluxos de investigação, impl
 | Análise com muitos agentes | [`.codex/agents/`](.codex/agents/) | Quatro agentes focados e somente leitura, acionados por uma skill de análise |
 | Plugins, MCPs e settings privados do Claude | Provisionamento manual | Integrações podem exigir ferramentas, contas ou credenciais; não são instaladas nem habilitadas implicitamente |
 
-Opções como `skipDangerousModePermissionPrompt`, `skipAutoPermissionPrompt` e o modo de permissão do Claude não são copiadas para reduzir as proteções do Codex. O nível `xhigh` aparece como uma opção comentada porque a disponibilidade depende do modelo e do cliente. Também não há lint/typecheck automático a cada edição: os comandos variam por projeto e devem seguir os critérios de validação da tarefa.
+Opções como `skipDangerousModePermissionPrompt`, `skipAutoPermissionPrompt` e o modo de permissão do Claude não são copiadas para reduzir as proteções do Codex. Também não há lint/typecheck automático a cada edição: os comandos variam por projeto e devem seguir os critérios de validação da tarefa.
 
 ## Instalação
 
@@ -34,9 +34,18 @@ No Windows PowerShell:
 ./install.ps1
 ```
 
-O instalador copia skills para `~/.agents/skills`, agentes para `$CODEX_HOME/agents`, adiciona as instruções à `$CODEX_HOME/AGENTS.md`, mescla preferências gerais a `$CODEX_HOME/config.toml` e instala o guard em `$CODEX_HOME/hooks.json`. Configurações preexistentes são preservadas. Use `--force` / `-Force` para fazer backup e substituir skills/agentes com conflito.
+O instalador copia skills para `~/.agents/skills`, agentes para `$CODEX_HOME/agents`, adiciona as instruções à `$CODEX_HOME/AGENTS.md`, mescla preferências gerais a `$CODEX_HOME/config.toml` (incluindo `service_tier = "auto"` e `model_reasoning_effort = "medium"`, veja abaixo) e instala o guard em `$CODEX_HOME/hooks.json`. Configurações preexistentes são preservadas. Use `--force` / `-Force` para fazer backup e substituir skills/agentes com conflito.
 
 Reinicie o Codex para carregar as skills e os agentes. A statusline nativa e o editor offline ficam no [repositório statuslinecodex](https://github.com/Felipeness/statuslinecodex). O Codex exige que hooks novos sejam revisados e confiados em `/hooks` antes de executá-los. A instalação global do hook não pula essa revisão.
+
+### Modelo, esforço e service tier
+
+| Chave | Valor | Por quê |
+|---|---|---|
+| `service_tier` | `"auto"` | Via LLM Gateway o tier `fast` é recusado e o Codex mostra aviso a cada chamada. O instalador sempre grava `auto`, mesmo se já houver outro valor |
+| `model_reasoning_effort` | `"medium"` | `high`/`xhigh` deixam o Codex bem mais lento e gastam mais token sem ganho no dia a dia. Só é gravado se você ainda não escolheu um nível |
+
+As duas chaves ficam no topo do `config.toml`, antes da primeira tabela `[...]`; abaixo de uma tabela o TOML as trata como parte dela e o Codex ignora. O provider (`model`, `model_provider`, `[model_providers.*]`) não é instalado por aqui, ele depende de cada empresa: siga o manual interno de configuração do Codex.
 
 ## Workflows e skills
 
