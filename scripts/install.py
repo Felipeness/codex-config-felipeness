@@ -227,11 +227,11 @@ def merge_root(
 
 
 def merge_config(text: str) -> str:
-    # service_tier "fast" is rejected by the LLM Gateway, so "auto" always wins;
+    # the LLM Gateway only accepts the "default" tier ("fast" and "auto" are rejected), so it always wins;
     # reasoning effort is only a default and keeps whatever the user already chose.
     merged = merge_root(
         text,
-        {"model_reasoning_effort": '"medium"', "service_tier": '"auto"'},
+        {"model_reasoning_effort": '"medium"', "service_tier": '"default"'},
         required_overrides={"service_tier"},
     )
     merged = merge_table(

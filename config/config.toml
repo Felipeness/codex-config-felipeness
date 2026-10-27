@@ -2,8 +2,8 @@
 # Chaves de topo precisam ficar antes da primeira tabela [..].
 # medium entrega bem no dia a dia; high/xhigh deixam o Codex lento e caro.
 model_reasoning_effort = "medium"
-# O LLM Gateway recusa "fast"; "auto" evita o aviso de service tier.
-service_tier = "auto"
+# O LLM Gateway só aceita o tier "default"; "fast" e "auto" são recusados.
+service_tier = "default"
 
 [agents]
 max_concurrent_threads_per_session = 4
